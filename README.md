@@ -78,7 +78,8 @@ verifiability = compute_verifiability(model.outputs)
 relevance = compute_relevance(input_data, active_concepts)
 model.learn(utility, verifiability, relevance)
 meta.update_weights(model.performance_history)
-📊 Applications
+```
+## Applications
     Creative AI: Generating novel concepts, theories, and artistic expressions
     Scientific Discovery: Hypothesis generation and paradigm shift simulation
     Educational AI: Adaptive learning systems that develop new teaching strategies
@@ -108,9 +109,9 @@ bibtex
 @software{gemma_novelty_framework,
   title = {GEMMA Novelty Generation Framework: A Recursive Model for True Novelty in AI},
   author = {Roberto Jimenez and collaborators},
-  year = {2024},
-  url = {https://github.com/yourusername/gemma-novelty-framework}
-}
+  year = {2025},
+  url = {https://github.com/deskiziarecords/gemma-novelty-framework}
+} 
 🤝 Contributing
 We welcome contributions! Please see CONTRIBUTING.md for guidelines.
 📄 License
