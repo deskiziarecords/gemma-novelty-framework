@@ -1,0 +1,164 @@
+# GEMMA Novelty Framework - Model Configuration
+# =============================================
+# Model Initialization
+initialization:
+  # Initial parameter values
+  k_t_initial: 0.5
+  eta_t_initial: 0.5
+  alpha_D_initial: 1.0
+  gamma_initial: 1.0
+  delta_initial: 1.0
+
+  # Random initialization ranges
+  noise_scale: 0.01
+  bias_initializer: "zeros"
+  weight_initializer: "xavier_uniform"
+
+  # Embedding initialization
+  embedding_init: "normal"
+  embedding_scale: 0.02
+# Memory Configuration
+memory_config:
+  # Canonical memory structure
+  embedding_storage: "centroid"  # "centroid", "ema", or "prototype"
+  temporal_context_dim: 64
+  max_temporal_history: 100
+  graph_update_strategy: "incremental"  # "incremental" or "periodic"
+
+  # Memory consolidation
+  consolidation_threshold: 0.7
+  forget_threshold: 0.1
+  memory_pruning_frequency: 1000
+
+  # Cache settings
+  use_cache: true
+  cache_size: 1000
+  cache_ttl: 3600
+# Dynamics Configuration
+dynamics:
+  # Satisfaction initialization
+  S0_range: [0.6, 0.9]      # Random initialization range
+  task_complexity_factor: 0.5  # Scales initial satisfaction
+
+  # Depth (x) to N mapping
+  depth_mapping: "exponential"  # "linear", "exponential", or "step"
+  N_min: 5
+  N_max: 100
+  depth_scale: 10.0
+
+  # Bounding strategies
+  clip_method: "hard"  # "hard", "soft", or "tanh"
+  clip_margin: 0.05
+# Embedding Configuration
+embeddings:
+  # Pre-trained model (if using)
+  pretrained_model: "sentence-transformers/all-mpnet-base-v2"
+  finetune_embeddings: true
+  embedding_pooling: "mean"  # "mean", "max", or "cls"
+
+  # Custom embedding training
+  vocab_size: 50000
+  train_embeddings: false
+  embedding_train_lr: 0.001
+
+  # Similarity metrics
+  distance_metric: "cosine"  # "cosine", "euclidean", or "manhattan"
+  similarity_threshold: 0.8
+# Loss Configuration
+loss_config:
+  # Entropy penalty
+  entropy_bins: 20           # Number of bins for discretization
+  entropy_window: 100        # History for distribution estimation
+  kernel_density: false      # Use KDE instead of binning
+
+  # Coherence constraint
+  relation_function: "dot_product"  # "dot_product", "mlp", or "bilinear"
+  expected_relation_model: "memory_based"  # "memory_based", "learned", or "hybrid"
+  coherence_weight_decay: 0.01
+# Meta-Learning Configuration
+meta_learning:
+  # Pareto optimization
+  pareto_algorithm: "nsga2"  # "nsga2", "moead", or "simple"
+  population_size: 50
+  generations: 100
+  crossover_rate: 0.9
+  mutation_rate: 0.1
+
+  # Stagnation detection
+  progress_threshold: 0.001
+  stagnation_penalty: 0.5
+  adaptation_schedule: "adaptive"  # "fixed", "linear", or "adaptive"
+
+  # Weight constraints
+  min_weight: 0.05
+  max_weight: 0.95
+  sum_constraint: true
+# Optimization Configuration
+optimization:
+  optimizer: "adam"          # "adam", "sgd", or "adamw"
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1e-8
+  weight_decay: 0.01
+
+  # Learning rate schedules
+  lr_scheduler: "cosine"     # "cosine", "step", "plateau", or "constant"
+  warmup_steps: 1000
+  decay_steps: 10000
+  min_lr: 1e-6
+
+  # Gradient handling
+  gradient_accumulation: 1
+  amp: false                 # Automatic Mixed Precision
+# Evaluation Configuration
+evaluation:
+  # Novelty evaluation
+  novelty_thresholds:
+    low: 0.3
+    medium: 0.6
+    high: 0.8
+
+  # Metrics to track
+  tracked_metrics:
+    - "utility"
+    - "verifiability"
+    - "relevance"
+    - "coherence"
+    - "disparity"
+    - "semantic_shift"
+
+  # Evaluation frequency
+  eval_steps: 100
+  save_predictions: true
+  prediction_format: "json"  # "json", "csv", or "parquet"
+# Logging Configuration
+logging:
+  log_level: "INFO"          # "DEBUG", "INFO", "WARNING", "ERROR"
+  log_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  # TensorBoard
+  use_tensorboard: true
+  tensorboard_dir: "./runs"
+  log_graph: true
+
+  # WandB (Weights & Biases)
+  use_wandb: false
+  wandb_project: "gemma-novelty"
+  wandb_entity: null
+
+  # Checkpoints
+  save_checkpoints: true
+  checkpoint_dir: "./checkpoints"
+  keep_checkpoints: 5
+# Hardware Configuration
+hardware:
+  device: "auto"             # "auto", "cpu", "cuda", "mps"
+  num_workers: 4
+  pin_memory: true
+  precision: "fp32"          # "fp32", "fp16", "bf16"
+
+  # Distributed training
+  distributed: false
+  world_size: 1
+  rank: 0
+  backend: "nccl"            # "nccl", "gloo", "mpi"

@@ -1,0 +1,92 @@
+# GEMMA Novelty Framework - Hyperparameters
+# ===========================================
+# Model Architecture
+model:
+  embedding_dim: 512
+  hidden_dim: 1024
+  num_layers: 4
+  attention_heads: 8
+  dropout: 0.1
+
+# Memory System
+memory:
+  decay_factor: 0.999  # EMA decay for canonical memory
+  memory_size: 10000   # Maximum concepts in memory
+  update_frequency: 10 # Steps between memory consolidation
+  normalization: true  # Normalize embeddings to unit vectors
+  use_graph_structure: true
+
+# Learning Rates
+learning_rates:
+  k_t: 0.01
+  eta_t: 0.01
+  alpha_D: 0.001
+  gamma: 0.001
+  delta: 0.001
+  meta_learning_rate: 0.0005
+
+# Novelty Generation Parameters
+novelty:
+  min_semantic_shift: 0.1    # Minimum ΔS to be considered novel
+  max_active_concepts: 50    # Maximum N in active set
+  combinatorial_weight: 1.0   # γ in SCCI
+  semantic_shift_weight: 1.0  # δ in SCCI
+  noise_epsilon: 0.01        # ε_t baseline
+
+# Satisfaction Dynamics
+satisfaction:
+  lambda_S: 0.1              # EMA smoothing for S(t)
+  rho: 0.4                   # Weight for utility
+  kappa: 0.3                 # Weight for verifiability
+  tau: 0.3                   # Weight for relevance
+  S_min: 0.15                # Minimum satisfaction bound
+  S_max: 1.0                 # Maximum satisfaction bound
+  decay_rate: 0.15           # Beta for time-based decay
+
+# Loss Function Weights (Initial)
+loss:
+  w1: 0.6                    # MSE weight (accuracy)
+  w2: 0.2                    # Entropy penalty weight (stability)
+  w3: 0.2                    # Coherence constraint weight
+  temporal_smoothing: 0.1    # μ in H(B)
+
+# Meta Optimization
+meta:
+  pareto_window: 100         # History size for Pareto analysis
+  adaptation_rate: 0.1
+  stagnation_window: 10
+  min_entropy: 0.5           # Minimum diversity in weights
+  meta_alpha: 0.6            # Direct optimization weight
+  meta_beta: 0.3             # Temporal consistency weight
+  meta_gamma: 0.1            # Diversity bonus weight
+
+# Concept Disparity
+concepts:
+  disparity_exponent: 1.5    # α_D in C_total
+  min_similarity: 0.1        # Minimum for cos() to avoid division by zero
+  centroid_method: "exclude_self"  # "exclude_self" or "all"
+  sigma: 1.0                 # Scaling for exponential disparity
+
+# Exploration vs Exploitation
+exploration:
+  depth_increment: 1.0       # dx/dt when S(t) > 0
+  depth_decrement: 1.0       # dx/dt when S(t) = 0
+  satisfaction_increment: 1.0 # dS/dt when S(t) = 0
+  satisfaction_decrement: 1.0 # dS/dt when S(t) > 0
+  depth_to_n_scale: 0.1      # Scaling from x to N
+
+# Training
+training:
+  batch_size: 32
+  num_epochs: 100
+  validation_frequency: 10
+  checkpoint_frequency: 25
+  early_stopping_patience: 20
+  gradient_clip: 1.0
+
+# Utility/Verifiability/Relevance Metrics
+metrics:
+  utility_window: 50         # Window for precision calculation
+  uncertainty_method: "entropy"  # "entropy", "variance", or "confidence"
+  relevance_threshold: 0.3   # Min similarity for relevance
+  normalization_method: "sigmoid" # "sigmoid", "tanh", or "minmax"
